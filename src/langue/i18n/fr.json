@@ -1,0 +1,15 @@
+{
+    "translation": {
+        "home": "Acceuil",
+        "side.auth": "Authentification",
+        "side.register": "Inscription",
+        "side.admin.account": "Compte",
+        "side.admin.messages": "Messages",
+        "side.admin.biens": "Gestion des biens",
+        "side.admin.prestations": "Gestion des prestations",
+        "side.admin.bailleurs": "Gestion des bailleurs",
+        "side.admin.prestataires": "Gestion des prestataires",
+        "side.admin.voyageurs": "Gestion des voyageurs",
+        "side.admin.langues": "Langues"
+    }
+}

@@ -1,0 +1,7 @@
+https://www.prisma.io/docs/orm/prisma-migrate/workflows/troubleshooting
+
+npx prisma generate       (generate migration && prisma client schemas)
+npx prisma migrate dev    (run migration)
+
+
+find . -type f -name '*.sql' -exec cat {} + >> all.txt

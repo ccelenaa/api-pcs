@@ -1,0 +1,31 @@
+# The domain name
+domain: 'pcs.fr'
+
+# Server
+server:
+  host: '0.0.0.0'
+  port: 3000
+
+# Token & Cookie
+cookie_name: 'token'
+jwt_secret: 'MY_SECRET'
+
+# Payment
+payment:
+  host: http://payment
+
+# Database
+databases:
+  postgres:
+    url: 'postgresql://bleme:bleme@localhost:5543/bleme?schema=public'
+    # url: 'postgresql://postgres:postgres@10.43.200.200:5432/postgres?schema=public'
+
+# Rabbitmq
+rabbitmq:
+  connection:
+    protocol: 'amqp'
+    hostname: 'rabbitmq-queue.bleme.svc.cluster.local'
+    port:     5672
+    username: 'admin'
+    password: 'admin'
+    vhost:    'bleme'

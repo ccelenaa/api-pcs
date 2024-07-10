@@ -1,0 +1,21 @@
+FROM node:18
+
+# Create app directory
+RUN mkdir -p /usr/lib/pcs/api-pcs/
+WORKDIR /usr/lib/pcs/api-pcs/
+
+# Install dependencies
+COPY package.json .
+
+RUN npm install
+# RUN apt update 
+# RUN apt -y install systemd
+# RUN apt -y install cron
+
+# Exports
+EXPOSE 80
+
+# Run container
+CMD npm run start:dev & npx prisma studio
+# CMD ["/lib/systemd/systemd", "&", "npm", "run", "start:dev"]
+# CMD ["bash", "-c", "/lib/systemd/systemd & npm run start:dev"]
