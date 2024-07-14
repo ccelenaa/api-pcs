@@ -212,7 +212,7 @@ model prestation {
 
 model service {
   id                        BigInt       @id @default(autoincrement())
-  id_voyageur               BigInt?
+  id_voyageur               BigInt
   label                     String?      @db.VarChar(1024)
   adresse                   String?      @db.VarChar(150)
   prix_min                  Float?       @db.Real
