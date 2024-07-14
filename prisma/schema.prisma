@@ -46,7 +46,6 @@ model bien {
   date_suppression         DateTime?
   bailleur                 bailleur   @relation(fields: [id_bailleur], references: [id], map: "bien_bailleur_id_fkey")
   location                 location[]
-  photo                    photo[]
   planing                  planing[]
 
   @@map("biens")
@@ -89,12 +88,12 @@ model location {
 
 model photo {
   id                BigInt    @id @default(autoincrement())
-  id_bien           BigInt
+  id_model          BigInt
+  model             String    @db.VarChar(128)
   url               String    @db.VarChar(32)
   date_creation     DateTime  @default(now())
   date_modification DateTime  @default(now())
   date_suppression  DateTime?
-  bien              bien      @relation(fields: [id_bien], references: [id], map: "photo_bien_id_fkey")
 
   @@map("photos")
 }
@@ -115,40 +114,38 @@ model planing {
 }
 
 model prestataire {
-  id                  BigInt                @id @default(autoincrement())
-  nom                 String?               @db.VarChar(128)
-  email               String                @db.VarChar(128)
-  login               String                @db.VarChar(32)
-  password            String                @db.VarChar(512)
-  langue              String                @default("fr") @db.VarChar(32)
-  data                Json                  @default("{}")
-  date_validation     DateTime?
-  date_suspension     DateTime?
-  date_creation       DateTime              @default(now())
-  date_modification   DateTime              @default(now())
-  date_suppression    DateTime?
-  prestataire_service prestataire_service[]
-  prestation          prestation[]
+  id                BigInt       @id @default(autoincrement())
+  nom               String?      @db.VarChar(128)
+  email             String       @db.VarChar(128)
+  login             String       @db.VarChar(32)
+  password          String       @db.VarChar(512)
+  langue            String       @default("fr") @db.VarChar(32)
+  data              Json         @default("{}")
+  date_validation   DateTime?
+  date_suspension   DateTime?
+  date_creation     DateTime     @default(now())
+  date_modification DateTime     @default(now())
+  date_suppression  DateTime?
+  prestation        prestation[]
 
   @@map("prestataires")
 }
 
 model voyageur {
-  id                BigInt       @id @default(autoincrement())
-  nom               String?      @db.VarChar(128)
-  email             String       @db.VarChar(128)
-  telephone         String       @db.VarChar(32)
-  login             String       @db.VarChar(32)
-  password          String       @db.VarChar(512)
-  langue            String       @default("fr") @db.VarChar(32)
-  data              Json         @default("{}")
+  id                BigInt     @id @default(autoincrement())
+  nom               String?    @db.VarChar(128)
+  email             String     @db.VarChar(128)
+  telephone         String     @db.VarChar(32)
+  login             String     @db.VarChar(32)
+  password          String     @db.VarChar(512)
+  langue            String     @default("fr") @db.VarChar(32)
+  data              Json       @default("{}")
   date_suspension   DateTime?
-  date_validation   DateTime?    @default(now())
-  date_creation     DateTime     @default(now())
-  date_modification DateTime     @default(now())
+  date_validation   DateTime?  @default(now())
+  date_creation     DateTime   @default(now())
+  date_modification DateTime   @default(now())
   date_suppression  DateTime?
   location          location[]
-  prestation        prestation[]
 
   @@map("voyageurs")
 }
@@ -184,61 +181,51 @@ model facture {
   @@map("factures")
 }
 
-model prestataire_service {
-  id                BigInt      @id @default(autoincrement())
-  id_prestataire    BigInt
-  id_service        BigInt
-  prix              Float       @default(0) @db.Real
-  pcs_marge         Float       @default(0) @db.Real
-  date_creation     DateTime    @default(now())
-  date_modification DateTime    @default(now())
-  date_suppression  DateTime?
-  prestataire       prestataire @relation(fields: [id_prestataire], references: [id], map: "prestataire_service_prestataire_id_fkey")
-  service           service     @relation(fields: [id_service], references: [id], map: "prestataire_service_service_id_fkey")
-
-  @@map("prestataire_service")
-}
-
 model prestation {
-  id                          BigInt        @id @default(autoincrement())
-  id_voyageur                 BigInt
-  id_prestataire              BigInt?
-  id_service                  BigInt
-  id_facture                  BigInt?
-  prix                        Float         @default(0) @db.Real
-  pcs_marge                   Float         @default(0) @db.Real
-  prix_client                 Float         @default(0) @db.Real
-  prix_supplementaire         Float         @default(0) @db.Real
-  devise                      String        @default("eu") @db.VarChar(32)
-  lieu_prestation             String?       @db.VarChar(512)
-  date_prestation             DateTime?
-  date_validation_voyageur    DateTime?
-  date_validation_prestataire DateTime?
-  statut                      String        @default("new") @db.VarChar(32)
-  remarque                    String?       @db.VarChar(512)
-  note                        Int           @default(0)
-  date_creation               DateTime      @default(now())
-  date_modification           DateTime      @default(now())
-  date_suppression            DateTime?
-  facture                     facture?      @relation(fields: [id_facture], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "prestation_facture_id_fkey")
-  prestataire                 prestataire?  @relation(fields: [id_prestataire], references: [id], onDelete: Restrict, map: "prestation_prestataire_id_fkey")
-  service                     service       @relation(fields: [id_service], references: [id], map: "prestation_service_id_fkey")
-  voyageur                    voyageur      @relation(fields: [id_voyageur], references: [id], map: "prestation_voyageur_id_fkey")
-  transactions                transaction[]
+  id                           BigInt        @id @default(autoincrement())
+  id_service                   BigInt
+  id_prestataire               BigInt?
+  id_facture                   BigInt?
+  prix_pretataire              Float         @default(0) @db.Real
+  pcs_marge                    Float         @default(0) @db.Real
+  prix_supplementaire          Float         @default(0) @db.Real
+  date_prestation              DateTime?
+  date_validation_voyageur     DateTime?
+  date_validation_prestataire  DateTime?
+  statut                       String        @default("new") @db.VarChar(32)
+  remarque                     String?       @db.VarChar(512)
+  note                         Int           @default(0)
+  data                         Json          @default("{}")
+  date_suppression_admin       DateTime?
+  date_suppression_voyageur    DateTime?
+  date_suppression_prestataire DateTime?
+  date_creation                DateTime      @default(now())
+  date_modification            DateTime      @default(now())
+  messages                     messages[]
+  facture                      facture?      @relation(fields: [id_facture], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "prestation_facture_id_fkey")
+  prestataire                  prestataire?  @relation(fields: [id_prestataire], references: [id], onDelete: Restrict, map: "prestation_prestataire_id_fkey")
+  service                      service       @relation(fields: [id_service], references: [id], map: "prestation_service_id_fkey")
+  transactions                 transaction[]
 
   @@map("prestations")
 }
 
 model service {
-  id                  BigInt                @id @default(autoincrement())
-  label               String?               @db.VarChar(255)
-  prix_standard       Float                 @default(0) @db.Real
-  pcs_marge           Float                 @default(0) @db.Real
-  date_creation       DateTime              @default(now())
-  date_modification   DateTime              @default(now())
-  date_suppression    DateTime?
-  prestataire_service prestataire_service[]
-  prestation          prestation[]
+  id                        BigInt       @id @default(autoincrement())
+  id_voyageur               BigInt?
+  label                     String?      @db.VarChar(1024)
+  adresse                   String?      @db.VarChar(150)
+  prix_min                  Float?       @db.Real
+  prix_max                  Float?       @db.Real
+  statut                    String       @default("new") @db.VarChar(30)
+  remarque                  String?      @db.VarChar(512)
+  data                      Json         @default("{}")
+  date_creation             DateTime     @default(now())
+  date_realisation          DateTime?
+  date_modification         DateTime     @default(now())
+  date_admin_suppression    DateTime?
+  date_voyageur_suppression DateTime?
+  prestation                prestation[]
 
   @@map("services")
 }
@@ -262,4 +249,30 @@ model transaction {
   prestation        prestation? @relation(fields: [id_prestation], references: [id], onDelete: Cascade, map: "transaction_prestation_id_fkey")
 
   @@map("transactions")
+}
+
+model message {
+  id                BigInt     @id(map: "message_pkey") @default(autoincrement())
+  id_prestation     BigInt
+  id_voyageur       BigInt?
+  id_prestataire    BigInt?
+  id_admin          BigInt?
+  message           String?    @db.VarChar(1024)
+  date_creation     DateTime   @default(now())
+  date_modification DateTime   @default(now())
+  date_suppression  DateTime?
+  prestations       prestation @relation(fields: [id_prestation], references: [id], map: "message_prestation_id_fkey")
+
+  @@map("messages")
+}
+
+model tarif {
+  id                BigInt    @id @default(autoincrement())
+  key               String    @db.VarChar(128)
+  value             Float?    @default(10) @db.Real
+  date_creation     DateTime  @default(now())
+  date_modification DateTime  @default(now())
+  date_suppression  DateTime?
+
+  @@map("tarifs")
 }
