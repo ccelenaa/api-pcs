@@ -22,6 +22,7 @@ model bailleur {
   date_modification DateTime  @default(now())
   date_suppression  DateTime?
   bien              bien[]
+  factures          facture[]
 
   @@map("bailleurs")
 }
@@ -126,6 +127,7 @@ model prestataire {
   date_creation     DateTime     @default(now())
   date_modification DateTime     @default(now())
   date_suppression  DateTime?
+  factures          facture[]
   prestation        prestation[]
 
   @@map("prestataires")
@@ -145,6 +147,7 @@ model voyageur {
   date_creation     DateTime   @default(now())
   date_modification DateTime   @default(now())
   date_suppression  DateTime?
+  factures          facture[]
   location          location[]
 
   @@map("voyageurs")
@@ -167,14 +170,22 @@ model admin {
 }
 
 model facture {
-  id                BigInt       @id @default(autoincrement())
-  type              String       @default("location") @db.VarChar(32)
-  prix              Float        @default(0) @db.Real
-  total             Float        @default(0) @db.Real
-  data              Json         @default("{}")
-  date_creation     DateTime     @default(now())
-  date_modification DateTime     @default(now())
+  id                BigInt        @id @default(autoincrement())
+  id_facturation    BigInt?
+  id_prestataire    BigInt?
+  id_bailleur       BigInt?
+  id_voyageur       BigInt?
+  type              String        @default("location") @db.VarChar(32)
+  prix              Float         @default(0) @db.Real
+  total             Float         @default(0) @db.Real
+  data              Json          @default("{}")
+  date_creation     DateTime      @default(now())
+  date_modification DateTime      @default(now())
   date_suppression  DateTime?
+  bailleurs         bailleur?     @relation(fields: [id_bailleur], references: [id], onDelete: Restrict, map: "facture_bailleur_id_fkey")
+  facturations      facturations? @relation(fields: [id_facturation], references: [id], onDelete: Restrict, map: "facture_facturation_id_fkey")
+  prestataires      prestataire?  @relation(fields: [id_prestataire], references: [id], onDelete: Restrict, map: "facture_prestataire_id_fkey")
+  voyageurs         voyageur?     @relation(fields: [id_voyageur], references: [id], onDelete: Restrict, map: "facture_voyageur_id_fkey")
   location          location[]
   prestation        prestation[]
 
@@ -275,4 +286,18 @@ model tarif {
   date_suppression  DateTime?
 
   @@map("tarifs")
+}
+
+model facturation {
+  id                BigInt    @id @default(autoincrement())
+  type              String    @default("prestation") @db.VarChar(32)
+  data              Json      @default("{}")
+  date_debut        DateTime  @default(now())
+  date_fin          DateTime  @default(now())
+  date_creation     DateTime  @default(now())
+  date_modification DateTime  @default(now())
+  date_suppression  DateTime?
+  factures          facture[]
+
+  @@map("facturations")
 }
