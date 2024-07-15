@@ -6,34 +6,28 @@ import { PrismaService } from 'src/prisma/prisma.service';
 export class TypePrestationController {
   constructor(private serviceService: ServiceService, private prisma: PrismaService) {}
 
-  /*
-  Route: /biens
-  Recupere tout les biens
-  */
   @Get()
   @HttpCode(HttpStatus.OK)
-  async biens() {
+  async services() {
     return this.serviceService.gets();
   }
 
-  /*
-  Route: /biens/:id_bien
-  Recupere le bien ayant <id_bien>
-  */
   @Get(':id_service')
   @HttpCode(HttpStatus.OK)
-  async bien(@Param('id_service') id_type_prestation: number) {
+  async service(@Param('id_service') id_type_prestation: number) {
     return this.serviceService.get(id_type_prestation);
   }
 
-  /*
-  Route: /biens/:id_bien
-  Recupere le bien ayant <id_bien>
-  */
-  @Get('prestataire/:id_prestation')
+  @Get('voyageur/:id_voyageur')
   @HttpCode(HttpStatus.OK)
-  async prestataire_service(@Param('id_prestation') id_prestation: number) {
-    return this.serviceService.getPrestataireServices(id_prestation);
+  async voyageur(@Param('id_voyageur') id_voyageur: number) {
+    return this.serviceService.getVoyageurServices(id_voyageur);
+  }
+
+  @Get('prestataire/:id_prestataire')
+  @HttpCode(HttpStatus.OK)
+  async prestataire(@Param('id_prestataire') id_prestataire: number) {
+    return this.serviceService.getPrestataireServices(id_prestataire);
   }
 
 }

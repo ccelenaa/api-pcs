@@ -239,7 +239,7 @@ model service {
   date_admin_suppression    DateTime?
   date_voyageur_suppression DateTime?
   prestation                prestation[]
-  voyageurs                 voyageur     @relation(fields: [id_voyageur], references: [id], map: "services_voyageur_id_fkey")
+  voyageur                  voyageur     @relation(fields: [id_voyageur], references: [id], map: "services_voyageur_id_fkey")
 
   @@map("services")
 }

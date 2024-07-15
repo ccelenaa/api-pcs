@@ -11,8 +11,7 @@ export class PrestationService {
     return await this.prisma.prestation.findMany({
       include: {
         prestataire: true,
-        service: true,
-        voyageur: true
+        service: true
       },
       orderBy: [{
         date_prestation: 'desc'
@@ -25,7 +24,7 @@ export class PrestationService {
   async getVoyageurPrestations(id_voyageur: number): Promise<prestation[]> {
     return await this.prisma.prestation.findMany({
       where: {
-        id_voyageur
+        id: 1
       },
       include: {
         prestataire: true,
@@ -57,8 +56,7 @@ export class PrestationService {
       },
       include: {
         prestataire: true,
-        service: true,
-        voyageur: true
+        service: true
       }
     });
   }

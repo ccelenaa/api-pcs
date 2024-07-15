@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { service, prestataire_service } from '@prisma/client';
+import { service } from '@prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
@@ -15,19 +15,46 @@ export class ServiceService {
     return await this.prisma.service.findFirst({
       where: {
         id: id_service
+      },
+      include: {
+        prestation: {
+          orderBy: {
+            date_creation: 'desc'
+          }
+        }
       }
     });
   }
 
-  async getPrestataireServices(id_prestataire: number): Promise<prestataire_service[]> {
-    return await this.prisma.prestataire_service.findMany({
+  async getVoyageurServices(id_voyageur: number): Promise<service[]> {
+    return await this.prisma.service.findMany({
       where: {
-        id_prestataire
+        id: id_voyageur
       },
       include: {
-        service: true
+        prestation: {
+          orderBy: {
+            date_creation: 'desc'
+          }
+        }
       }
     });
   }
+
+  async getPrestataireServices(id_prestataire: number): Promise<service[]> {
+    return await this.prisma.service.findMany({
+      where: {
+        id: id_prestataire
+      },
+      include: {
+        prestation: {
+          orderBy: {
+            date_creation: 'desc'
+          }
+        }
+      }
+    });
+  }
+
 
 }

@@ -36,7 +36,9 @@ export class TransactionService {
           },
           {
             prestation: {
-              id_voyageur
+              service: {
+                id_voyageur
+              }
             }
           }
         ]
