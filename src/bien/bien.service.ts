@@ -9,6 +9,9 @@ export class BienService {
 
   async gets(): Promise<bien[]> {
     return await this.prisma.bien.findMany({
+      include: {
+        bailleur: true
+      },
       orderBy: {
         id: 'asc'
       }
@@ -17,6 +20,9 @@ export class BienService {
 
   async get(id_bien: number): Promise<bien> {
     return await this.prisma.bien.findFirst({
+      include: {
+        bailleur: true
+      },
       where: {
         id: id_bien
       }
@@ -30,6 +36,9 @@ export class BienService {
       },
       data: {
         date_validation: validation ? new Date() : null
+      },
+      include: {
+        bailleur: true
       }
     });
   }
@@ -41,6 +50,9 @@ export class BienService {
       },
       data: {
         date_suspension: suspenssion ? new Date() : null
+      },
+      include: {
+        bailleur: true
       }
     });
   }
@@ -52,6 +64,9 @@ export class BienService {
       },
       data: {
         date_suspension_bailleur: suspenssion ? new Date() : null
+      },
+      include: {
+        bailleur: true
       }
     });
   }

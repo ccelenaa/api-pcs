@@ -1,4 +1,4 @@
-import { Controller, Get, HttpCode, HttpStatus, Param, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, HttpCode, HttpStatus, Param, Post, UseGuards } from '@nestjs/common';
 import { ServiceService } from './service.service';
 import { PrismaService } from 'src/prisma/prisma.service';
 
@@ -14,7 +14,7 @@ export class TypePrestationController {
 
   @Get(':id_service')
   @HttpCode(HttpStatus.OK)
-  async service(@Param('id_service') id_type_prestation: number) {
+  async service(@Param('id_service') id_type_prestation: bigint) {
     return this.serviceService.get(id_type_prestation);
   }
 
@@ -30,4 +30,9 @@ export class TypePrestationController {
     return this.serviceService.getPrestataireServices(id_prestataire);
   }
 
+  @Post(':id_service/set/prestataire')
+  @HttpCode(HttpStatus.OK)
+  async setPrestataire(@Param('id_service') id_service: number, @Body('id_prestataire') id_prestataire: number) {
+    return this.serviceService.setPrestataire(id_service, id_prestataire);
+  }
 }

@@ -31,16 +31,6 @@ export class PrestationController {
   Route: /biens/:id_bien
   Recupere le bien ayant <id_bien>
   */
-  @Post(':id_prestation/set/prestataire')
-  @HttpCode(HttpStatus.OK)
-  async setPrestataire(@Param('id_prestation') id_prestation: number, @Body('id_prestataire') id_prestataire: number|null) {
-    return this.prestationService.setPrestataire(id_prestation,id_prestataire);
-  }
-
-  /*
-  Route: /biens/:id_bien
-  Recupere le bien ayant <id_bien>
-  */
   @Post(':id_prestation/set/note')
   @HttpCode(HttpStatus.OK)
   async setNote(@Param('id_prestation') id_prestation: number, @Body('note') note: number) {
