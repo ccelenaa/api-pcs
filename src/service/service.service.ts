@@ -40,13 +40,16 @@ export class ServiceService {
   async getVoyageurServices(id_voyageur: number): Promise<service[]> {
     return await this.prisma.service.findMany({
       where: {
-        id: id_voyageur
+        id_voyageur
       },
       include: {
         voyageur: true,
         prestations: {
           orderBy: {
             date_creation: 'desc'
+          },
+          include: {
+            prestataire: true
           }
         }
       }
@@ -83,13 +86,20 @@ export class ServiceService {
       },
     });
 
+    const service = await this.prisma.service.update({
+      where: {
+        id: id_service
+      },
+      data: {
+        statut: id_prestataire > 0 ? 1 : 0
+      },
+      select: {
+        id: true,
+        date: true
+      }
+    });
+
     if(id_prestataire > 0) {
-      const service = await this.prisma.service.findFirst({
-        where: {
-          id: id_service
-        }
-      });
-  
       await this.prisma.prestation.create({
         data: {
           id_service,

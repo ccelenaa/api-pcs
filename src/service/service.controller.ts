@@ -1,6 +1,8 @@
-import { Body, Controller, Get, HttpCode, HttpStatus, Param, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, HttpCode, HttpStatus, Param, Post, UploadedFiles, UseGuards, UseInterceptors } from '@nestjs/common';
 import { ServiceService } from './service.service';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { FilesInterceptor } from '@nestjs/platform-express';
+import { join } from 'path';
 
 @Controller('services')
 export class TypePrestationController {
@@ -34,5 +36,14 @@ export class TypePrestationController {
   @HttpCode(HttpStatus.OK)
   async setPrestataire(@Param('id_service') id_service: number, @Body('id_prestataire') id_prestataire: number) {
     return this.serviceService.setPrestataire(id_service, id_prestataire);
+  }
+
+  @Post('ajout')
+  @HttpCode(HttpStatus.OK)
+  @UseInterceptors(FilesInterceptor('images', 10))
+  async create(@Body() body: any, @UploadedFiles() files: Array<Express.Multer.File>) {
+    console.log(join(__dirname, '..', 'uploads'));
+    console.log(files)
+    return null
   }
 }
