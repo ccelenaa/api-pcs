@@ -49,6 +49,7 @@ model bien {
   location                 location[]
   planing                  planing[]
 
+  photos                   photo[]  @relation("bien_photo")
   @@map("biens")
 }
 
@@ -96,6 +97,8 @@ model photo {
   date_modification DateTime  @default(now())
   date_suppression  DateTime?
 
+  bien              bien?     @relation("bien_photo", fields: [id_model], references: [id], map: "photo_bien_id_model_fkey")
+  service           service?  @relation("service_photo", fields: [id_model], references: [id], map: "photo_service_id_model_fkey")
   @@map("photos")
 }
 
@@ -243,6 +246,7 @@ model service {
   prestations               prestation[]
   voyageur                  voyageur     @relation(fields: [id_voyageur], references: [id], map: "services_voyageur_id_fkey")
 
+  photos                   photo[]  @relation("service_photo")
   @@map("services")
 }
 
