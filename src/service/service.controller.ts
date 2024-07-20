@@ -44,6 +44,6 @@ export class TypePrestationController {
   async create(@Body() body: any, @UploadedFiles() files: Array<Express.Multer.File>) {
     console.log(join(process.cwd(), 'public/images'));
     
-    return {}
+    return {files}
   }
 }
