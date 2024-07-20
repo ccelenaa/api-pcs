@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { prestation, service } from '@prisma/client';
+import { photo, prestation, service } from '@prisma/client';
 import { PrestationService } from 'src/prestation/prestation.service';
 import { PrismaService } from 'src/prisma/prisma.service';
 
@@ -69,6 +69,33 @@ export class ServiceService {
         }
       }
     });
+  }
+
+  async add(id_voyageur, data, files): Promise<service> {
+    const service = await this.prisma.service.create({
+      data: {
+        id_voyageur,
+        label: data.label,
+        adresse: data.adresse,
+        date: new Date(),
+        prix_min: data.prix_min ? data.prix_min : 0,
+        prix_max: data.prix_max ? data.prix_max : 0,
+        data: {description: data.description}
+      },
+      include: {
+        voyageur: true
+      }
+    });
+
+    await Promise.all(files.map((file) => this.prisma.photo.create({
+      data: {
+        model: 'service',
+        id_model: service.id,
+        url: file.filename
+      } as photo
+    })));
+
+    return await this.get(service.id);
   }
 
 

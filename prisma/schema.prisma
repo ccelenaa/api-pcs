@@ -32,7 +32,7 @@ model bien {
   id_bailleur              BigInt
   type                     String     @db.VarChar(64)
   surface                  String     @db.VarChar(255)
-  description              String     @db.VarChar(255)
+  description              String     @db.VarChar(1024)
   statut                   String     @db.VarChar(64)
   prix                     Float      @default(0) @db.Real
   pcs_marge                Float      @default(0) @db.Real
@@ -91,7 +91,7 @@ model photo {
   id                BigInt    @id @default(autoincrement())
   id_model          BigInt
   model             String    @db.VarChar(128)
-  url               String    @db.VarChar(32)
+  url               String    @db.VarChar(1024)
   date_creation     DateTime  @default(now())
   date_modification DateTime  @default(now())
   date_suppression  DateTime?
@@ -226,7 +226,9 @@ model service {
   id                        BigInt       @id @default(autoincrement())
   id_voyageur               BigInt
   label                     String?      @db.VarChar(1024)
+  description               String?      @db.VarChar(2048)
   adresse                   String?      @db.VarChar(150)
+  contact                   String?      @db.VarChar(150)
   prix_min                  Float?       @db.Real
   prix_max                  Float?       @db.Real
   statut                    Int          @default(0)

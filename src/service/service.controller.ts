@@ -3,6 +3,9 @@ import { ServiceService } from './service.service';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { join } from 'path';
+import { voyageur } from '@prisma/client';
+import { GetCompte } from 'src/auth/decorator';
+import { JwtRequiredGuard } from 'src/auth/guard';
 
 @Controller('services')
 export class TypePrestationController {
@@ -38,12 +41,13 @@ export class TypePrestationController {
     return this.serviceService.setPrestataire(id_service, id_prestataire);
   }
 
-  @Post('ajout')
+  @UseGuards(JwtRequiredGuard)
   @HttpCode(HttpStatus.OK)
+  @Post('ajout')
   @UseInterceptors(FilesInterceptor('images', 10))
-  async create(@Body() body: any, @UploadedFiles() files: Array<Express.Multer.File>) {
+  async create(@GetCompte() compte: voyageur, @Body() body: any, @UploadedFiles() files: Array<Express.Multer.File>) {
     console.log(join(process.cwd(), 'public/images'));
-    
-    return {files}
+
+    return this.serviceService.add(compte.id, body, files);
   }
 }
