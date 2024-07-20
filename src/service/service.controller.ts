@@ -42,8 +42,8 @@ export class TypePrestationController {
   @HttpCode(HttpStatus.OK)
   @UseInterceptors(FilesInterceptor('images', 10))
   async create(@Body() body: any, @UploadedFiles() files: Array<Express.Multer.File>) {
-    console.log(join(__dirname, '..', 'uploads'));
-    console.log(files)
-    return null
+    console.log(join(process.cwd(), 'public/images'));
+    
+    return {}
   }
 }

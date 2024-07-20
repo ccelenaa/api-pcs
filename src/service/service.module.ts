@@ -4,14 +4,25 @@ import { TypePrestationController } from './service.controller';
 import { AuthModule } from 'src/auth/auth.module';
 import { MulterModule } from '@nestjs/platform-express';
 import { PrestationModule } from 'src/prestation/prestation.module';
-import { join } from 'path';
+import { extname, join } from 'path';
+import { diskStorage } from 'multer';
 
 @Module({
   imports: [
     AuthModule,
     PrestationModule,
     MulterModule.register({
-      dest: join(__dirname, '..', 'uploads'), // dossier pour stocker les fichiers
+      storage: diskStorage({
+        destination: (req, file, cb) => {
+          cb(null, join(process.cwd(), 'public/images'));
+        },
+        filename: (req, file, cb) => {
+          const ext = extname(file.originalname);
+          const name = file.originalname.replace(ext, '');
+          const filename = `${name}-${Date.now()}${ext}`;
+          cb(null, filename);
+        },
+      }),
     }),
   ],
   controllers: [TypePrestationController],
