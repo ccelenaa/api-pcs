@@ -15,6 +15,14 @@ export class ServiceService {
         prestations: {
           orderBy: {
             date_creation: 'desc'
+          },
+          include: {
+            prestataire: true
+          }
+        },
+        photos: {
+          where: {
+            model: 'service'
           }
         }
       }
@@ -31,6 +39,14 @@ export class ServiceService {
         prestations: {
           orderBy: {
             date_creation: 'desc'
+          },
+          include: {
+            prestataire: true
+          }
+        },
+        photos: {
+          where: {
+            model: 'service'
           }
         }
       }
@@ -51,6 +67,11 @@ export class ServiceService {
           include: {
             prestataire: true
           }
+        },
+        photos: {
+          where: {
+            model: 'service'
+          }
         }
       }
     });
@@ -62,9 +83,15 @@ export class ServiceService {
         id: id_prestataire
       },
       include: {
+        voyageur: true,
         prestations: {
           orderBy: {
             date_creation: 'desc'
+          }
+        },
+        photos: {
+          where: {
+            model: 'service'
           }
         }
       }
@@ -72,15 +99,17 @@ export class ServiceService {
   }
 
   async add(id_voyageur, data, files): Promise<service> {
+    console.log(JSON.stringify(data));
     const service = await this.prisma.service.create({
       data: {
         id_voyageur,
         label: data.label,
+        description: data.description,
         adresse: data.adresse,
-        date: new Date(),
-        prix_min: data.prix_min ? data.prix_min : 0,
-        prix_max: data.prix_max ? data.prix_max : 0,
-        data: {description: data.description}
+        contact: data.contact,
+        date: new Date(data.date),
+        prix_min: data.prix_min ? +data.prix_min : 0,
+        prix_max: data.prix_max ? +data.prix_max : 0
       },
       include: {
         voyageur: true
