@@ -22,7 +22,7 @@ model bailleur {
   date_creation     DateTime  @default(now())
   date_modification DateTime  @default(now())
   date_suppression  DateTime?
-  bien              bien[]
+  biens             bien[]
   factures          facture[]
 
   @@map("bailleurs")
@@ -50,7 +50,7 @@ model bien {
   date_modification        DateTime   @default(now())
   date_suppression         DateTime?
   bailleur                 bailleur   @relation(fields: [id_bailleur], references: [id], map: "bien_bailleur_id_fkey")
-  location                 location[]
+  locations                location[]
   planing                  planing[]
 
   photos                   photo[]  @relation("bien_photo")
@@ -137,7 +137,7 @@ model prestataire {
   date_modification DateTime     @default(now())
   date_suppression  DateTime?
   factures          facture[]
-  prestation        prestation[]
+  prestations       prestation[]
 
   @@map("prestataires")
 }
@@ -157,7 +157,7 @@ model voyageur {
   date_modification DateTime   @default(now())
   date_suppression  DateTime?
   factures          facture[]
-  location          location[]
+  locations         location[]
   services          service[]
 
   @@map("voyageurs")
@@ -196,8 +196,8 @@ model facture {
   facturations      facturation? @relation(fields: [id_facturation], references: [id], onDelete: Restrict, map: "facture_facturation_id_fkey")
   prestataires      prestataire? @relation(fields: [id_prestataire], references: [id], onDelete: Restrict, map: "facture_prestataire_id_fkey")
   voyageurs         voyageur?    @relation(fields: [id_voyageur], references: [id], onDelete: Restrict, map: "facture_voyageur_id_fkey")
-  location          location[]
-  prestation        prestation[]
+  locations         location[]
+  prestations       prestation[]
 
   @@map("factures")
 }

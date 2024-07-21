@@ -50,7 +50,8 @@ export class BienService {
           where: {
             model: 'bien'
           }
-        }
+        },
+        locations: true
       },
       where: {
         id: id_bien
@@ -63,7 +64,7 @@ export class BienService {
     const bien = await this.prisma.bien.create({
       data: {
         id_bailleur,
-        statut: 'statut',
+        statut: 'disponible',
         type: data.type,
         titre: data.titre,
         description: data.description,
@@ -71,35 +72,9 @@ export class BienService {
         adresse: data.adresse,
         prix: +data.prix,
         contact: data.contact,
-
-        // adresse: data.adresse,
-        // date: new Date(data.date),
-        // prix_min: data.prix_min ? +data.prix_min : 0,
-        // prix_max: data.prix_max ? +data.prix_max : 0
-      } as bien,
-      include: {
-        photos: true
-      }
+        devise: '€'
+      } as bien
     });
-
-    // id BIGSERIAL,
-    // id_bailleur bigint NOT NULL,
-    // type character varying(64) NOT NULL,
-    // surface character varying(255) NOT NULL,
-    // description character varying(1024) NOT NULL,
-    // statut character varying(64) NOT NULL,
-    // prix real DEFAULT 0 NOT NULL,
-    // pcs_marge real DEFAULT 0 NOT NULL,
-    // prix_client real DEFAULT 0 NOT NULL,
-    // devise character varying(32) DEFAULT 'eu'::character varying NOT NULL,
-    // data jsonb DEFAULT '{}'::jsonb NOT NULL,
-    // date_suspension_bailleur timestamp(3) without time zone,
-    // date_validation timestamp(3) without time zone,
-    // date_suspension timestamp(3) without time zone,
-    // date_creation timestamp(3) without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    // date_modification timestamp(3) without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    // date_suppression timestamp(3) without time zone,
-
 
     await Promise.all(files.map((file) => this.prisma.photo.create({
       data: {
