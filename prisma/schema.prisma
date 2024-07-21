@@ -36,7 +36,7 @@ model bien {
   titre                    String     @db.VarChar(1024)
   description              String     @db.VarChar(1024)
   adresse                  String     @db.VarChar(256)
-  contact                  String     @db.VarChar(256)
+  contact                  String?    @db.VarChar(256)
   statut                   String     @db.VarChar(64)
   prix                     Float      @default(0) @db.Real
   pcs_marge                Float      @default(0) @db.Real

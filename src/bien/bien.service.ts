@@ -69,7 +69,7 @@ export class BienService {
         description: data.description,
         surface: data.surface,
         adresse: data.adresse,
-        prix: +data.prix
+        prix: +data.prix,
         contact: data.contact,
 
         // adresse: data.adresse,
