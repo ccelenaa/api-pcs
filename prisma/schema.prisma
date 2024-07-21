@@ -35,6 +35,8 @@ model bien {
   surface                  String     @db.VarChar(255)
   titre                    String     @db.VarChar(1024)
   description              String     @db.VarChar(1024)
+  adresse                  String     @db.VarChar(256)
+  contact                  String     @db.VarChar(256)
   statut                   String     @db.VarChar(64)
   prix                     Float      @default(0) @db.Real
   pcs_marge                Float      @default(0) @db.Real
@@ -234,8 +236,8 @@ model service {
   id_voyageur               BigInt
   label                     String?      @db.VarChar(1024)
   description               String?      @db.VarChar(2048)
-  adresse                   String?      @db.VarChar(150)
-  contact                   String?      @db.VarChar(150)
+  adresse                   String?      @db.VarChar(256)
+  contact                   String?      @db.VarChar(256)
   prix_min                  Float?       @db.Real
   prix_max                  Float?       @db.Real
   statut                    Int          @default(0)

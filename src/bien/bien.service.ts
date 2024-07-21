@@ -64,9 +64,15 @@ export class BienService {
       data: {
         id_bailleur,
         statut: 'statut',
+        type: data.type,
+        titre: data.titre,
         description: data.description,
+        surface: data.surface,
+        adresse: data.adresse,
+        prix: +data.prix
+        contact: data.contact,
+
         // adresse: data.adresse,
-        // contact: data.contact,
         // date: new Date(data.date),
         // prix_min: data.prix_min ? +data.prix_min : 0,
         // prix_max: data.prix_max ? +data.prix_max : 0

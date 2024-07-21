@@ -22,7 +22,7 @@ export class BienController {
   */
   @Get(':id_bien')
   @HttpCode(HttpStatus.OK)
-  async bien(@Param('id_bien') id_bien: number) {
+  async bien(@Param('id_bien') id_bien: bigint) {
     return this.bienService.get(id_bien);
   }
 

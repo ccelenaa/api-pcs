@@ -6,6 +6,7 @@ import { RabbitMQModule } from 'src/rabbitmq/rabbitmq.module';
 import { BienModule } from 'src/bien/bien.module';
 import { LocationModule } from 'src/location/location.module';
 import { TransactionModule } from 'src/transaction/transaction.module';
+import { PrestationModule } from 'src/prestation/prestation.module';
 
 @Module({
   imports: [
@@ -13,6 +14,7 @@ import { TransactionModule } from 'src/transaction/transaction.module';
     BienModule,
     LocationModule,
     TransactionModule,
+    PrestationModule,
     RabbitMQModule
   ],
   controllers: [PaymentController],
