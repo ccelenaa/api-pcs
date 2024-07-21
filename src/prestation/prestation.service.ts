@@ -42,6 +42,10 @@ export class PrestationService {
     return await this.prisma.prestation.findFirst({
       where: {
         id: id_prestation
+      },
+      include: {
+        service: true,
+        prestataire: true
       }
     });
   }

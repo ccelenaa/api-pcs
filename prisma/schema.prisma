@@ -32,6 +32,7 @@ model bien {
   id_bailleur              BigInt
   type                     String     @db.VarChar(64)
   surface                  String     @db.VarChar(255)
+  titre                    String     @db.VarChar(1024)
   description              String     @db.VarChar(1024)
   statut                   String     @db.VarChar(64)
   prix                     Float      @default(0) @db.Real
@@ -74,6 +75,7 @@ model location {
   pcs_marge         Float         @default(0) @db.Real
   prix_client       Float         @default(0) @db.Real
   devise            String        @default("eu") @db.VarChar(32)
+  statut            Int           @default(0)
   data              Json          @default("{}")
   date_debut        DateTime      @default(now())
   date_fin          DateTime      @default(now())
@@ -201,7 +203,7 @@ model prestation {
   id_service                   BigInt
   id_prestataire               BigInt
   id_facture                   BigInt?
-  prix_pretataire              Float         @default(0) @db.Real
+  prix_prestataire             Float         @default(0) @db.Real
   pcs_marge                    Float         @default(0) @db.Real
   prix_supplementaire          Float         @default(0) @db.Real
   date_prestation              DateTime?

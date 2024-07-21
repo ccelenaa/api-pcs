@@ -10,6 +10,9 @@ export class ServiceService {
 
   async gets(): Promise<service[]> {
     return await this.prisma.service.findMany({
+      orderBy: {
+        date_creation: 'desc'
+      },
       include: {
         voyageur: true,
         prestations: {
@@ -58,6 +61,9 @@ export class ServiceService {
       where: {
         id_voyageur
       },
+      orderBy: {
+        date_creation: 'desc'
+      },
       include: {
         voyageur: true,
         prestations: {
@@ -81,6 +87,9 @@ export class ServiceService {
     return await this.prisma.service.findMany({
       where: {
         id: id_prestataire
+      },
+      orderBy: {
+        date_creation: 'desc'
       },
       include: {
         voyageur: true,

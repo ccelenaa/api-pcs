@@ -22,12 +22,14 @@ import { htmlPdf } from 'src/utils/pdf'
 import { createHash } from 'node:crypto'
 import { TransactionService } from 'src/transaction/transaction.service';
 import { createReadStream } from 'node:fs';
+import { PrestationService } from 'src/prestation/prestation.service';
 
 @Controller('payments')
 export class PaymentController {
   constructor(
     private readonly transactionService: TransactionService,
     private readonly bienService: BienService,
+    private readonly prestationService: PrestationService,
     private readonly paymentService: PaymentService,
     private readonly locationService: LocationService
   ) {}
@@ -56,11 +58,20 @@ export class PaymentController {
   @UseGuards(JwtRequiredGuard)
   @Post('prestations/:id_prestation')
   async prestation(
-    @Param('id_prestation') id_prestation: string,
-    @GetCompte() compte: Object,
+    @Param('id_prestation') id_prestation: number,
+    @GetCompte() compte: voyageur,
     @Headers('Origin') origin: string
   ) {
-    return await this.paymentService.prestation(compte as voyageur, null, origin);
+    const prestation = await this.prestationService.get(id_prestation);
+    const location = await this.locationService.create({
+      id_bien: BigInt(prestation.id),
+      id_voyageur: compte.id,
+      prix: prestation.prix_prestataire,
+      date_debut: new Date(),
+      date_fin: new Date(),
+    } as location);
+
+    return await this.paymentService.location(compte, location, origin);
   }
 
 
