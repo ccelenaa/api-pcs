@@ -38,7 +38,7 @@ export class PaymentController {
   @UseGuards(JwtRequiredGuard)
   @Post('locations/:id_bien')
   async bien(
-    @Param('id_bien') id_bien: number,
+    @Param('id_bien') id_bien: bigint,
     @GetCompte() compte: voyageur,
     @Headers('Origin') origin: string
   ) {
