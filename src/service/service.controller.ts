@@ -42,12 +42,10 @@ export class TypePrestationController {
   }
 
   @UseGuards(JwtRequiredGuard)
-  @HttpCode(HttpStatus.OK)
+  @HttpCode(HttpStatus.CREATED)
   @Post('ajout')
   @UseInterceptors(FilesInterceptor('images', 10))
   async create(@GetCompte() compte: voyageur, @Body() body: any, @UploadedFiles() files: Array<Express.Multer.File>) {
-    console.log(join(process.cwd(), 'public/images'));
-    console.log({files: files.length});
     return this.serviceService.add(compte.id, body, files);
   }
 }

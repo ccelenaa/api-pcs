@@ -1,6 +1,11 @@
-import { Body, Controller, Get, HttpCode, HttpStatus, Param, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, HttpCode, HttpStatus, Param, Post, UploadedFiles, UseGuards, UseInterceptors } from '@nestjs/common';
 import { BienService } from './bien.service';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { FilesInterceptor } from '@nestjs/platform-express';
+import { JwtRequiredGuard } from 'src/auth/guard';
+import { GetCompte } from 'src/auth/decorator';
+import { bailleur } from '@prisma/client';
+import { join } from 'path';
 
 @Controller('biens')
 export class BienController {
@@ -54,5 +59,13 @@ export class BienController {
   @HttpCode(HttpStatus.OK)
   async bailleur_suspenssion(@Param('id_bien') id_bien: number, @Body('suspendre') suspendre: boolean) {
     return this.bienService.bailleur_suspenssion(id_bien, suspendre);
+  }
+
+  @UseGuards(JwtRequiredGuard)
+  @HttpCode(HttpStatus.CREATED)
+  @Post('ajout')
+  @UseInterceptors(FilesInterceptor('images', 10))
+  async create(@GetCompte() compte: bailleur, @Body() body: any, @UploadedFiles() files: Array<Express.Multer.File>) {
+    return this.bienService.add(compte.id, body, files);
   }
 }

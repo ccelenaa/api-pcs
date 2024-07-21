@@ -10,7 +10,7 @@ export class BailleurService {
   async gets(): Promise<bailleur[]> {
     return await this.prisma.bailleur.findMany({
       include: {
-        bien: true,
+        biens: true,
       },
       orderBy: {
         date_creation: 'desc'
@@ -24,7 +24,7 @@ export class BailleurService {
         id: id_bailleur
       },
       include: {
-        bien: true,
+        biens: true,
       }
     });
   }
@@ -38,7 +38,7 @@ export class BailleurService {
         date_validation: validation ? new Date() : null
       },
       include: {
-        bien: true
+        biens: true
       }
     });
   }
@@ -52,7 +52,7 @@ export class BailleurService {
         date_suspension: suspenssion ? new Date() : null
       },
       include: {
-        bien: true,
+        biens: true,
       }
     });
   }
