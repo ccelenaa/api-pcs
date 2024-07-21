@@ -32,6 +32,17 @@ export class BienController {
   }
 
   /*
+  Route: /biens/:id_bien
+  Recupere le bien ayant <id_bien>
+  */
+  @UseGuards(JwtRequiredGuard)
+  @HttpCode(HttpStatus.OK)
+  @Get('bailleurs/me')
+  async bailleur(@GetCompte() compte: bailleur) {
+    return this.bienService.getBailleurBiens(compte.id);
+  }
+
+  /*
   Route: /biens/bailleur/:id_bailleur
   Recupere tout les biens d'u bailleur <id_bailleur>
   */
