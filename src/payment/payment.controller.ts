@@ -40,15 +40,21 @@ export class PaymentController {
   async bien(
     @Param('id_bien') id_bien: bigint,
     @GetCompte() compte: voyageur,
+    @Body() body: any,
     @Headers('Origin') origin: string
   ) {
+    const date_debut = new Date(body.date_debut);
+    const date_fin = new Date(body.date_fin);
+    date_debut.setHours(12, 0, 0, 0);
+    date_fin.setHours(12, 0, 0, 0);
+
     const bien = await this.bienService.get(id_bien);
     const location = await this.locationService.create({
       id_bien: BigInt(bien.id),
       id_voyageur: compte.id,
       prix: bien.prix,
-      date_debut: new Date(),
-      date_fin: new Date(),
+      date_debut,
+      date_fin,
     } as location);
 
     return await this.paymentService.location(compte, location, origin);
