@@ -9,11 +9,17 @@ export class PrestataireService {
 
   async gets(): Promise<prestataire[]> {
     return await this.prisma.prestataire.findMany({
-      // include: {
-      //   prestation: true,
-      // },
       orderBy: {
         date_creation: 'desc'
+      },
+      include: {
+        prestations: {
+          where: {
+            date_suppression_admin: null,
+            date_suppression_voyageur: null,
+            date_suppression_prestataire: null
+          }
+        },
       }
     });
   }
@@ -23,9 +29,15 @@ export class PrestataireService {
       where: {
         id: id_prestataire
       },
-      // include: {
-      //   bien: true,
-      // }
+      include: {
+        prestations: {
+          where: {
+            date_suppression_admin: null,
+            date_suppression_voyageur: null,
+            date_suppression_prestataire: null
+          }
+        },
+      }
     });
   }
 
@@ -37,9 +49,15 @@ export class PrestataireService {
       data: {
         date_validation: validation ? new Date() : null
       },
-      // include: {
-      //   bien: true
-      // }
+      include: {
+        prestations: {
+          where: {
+            date_suppression_admin: null,
+            date_suppression_voyageur: null,
+            date_suppression_prestataire: null
+          }
+        },
+      }
     });
   }
 
@@ -51,9 +69,15 @@ export class PrestataireService {
       data: {
         date_suspension: suspenssion ? new Date() : null
       },
-      // include: {
-      //   bien: true,
-      // }
+      include: {
+        prestations: {
+          where: {
+            date_suppression_admin: null,
+            date_suppression_voyageur: null,
+            date_suppression_prestataire: null
+          }
+        },
+      }
     });
   }
 }
