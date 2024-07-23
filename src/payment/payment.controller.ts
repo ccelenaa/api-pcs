@@ -1,10 +1,12 @@
 import { 
+  BadRequestException,
   Body, 
   Controller,
   Get,
   Header,
   Headers,
   HttpCode,
+  HttpException,
   HttpStatus,
   Param,
   Post,
@@ -24,6 +26,20 @@ import { TransactionService } from 'src/transaction/transaction.service';
 import { createReadStream } from 'node:fs';
 import { PrestationService } from 'src/prestation/prestation.service';
 import { PrismaService } from 'src/prisma/prisma.service';
+
+  function isDateInIntervals(intervals, D) {
+  
+    for (let interval of intervals) {
+      const startDate = new Date(interval.date_debut);
+      const endDate = new Date(interval.date_fin);
+  
+      if (D >= startDate && D <= endDate) {
+        return true;
+      }
+    }
+  
+    return false;
+  }
 
 @Controller('payments')
 export class PaymentController {
@@ -45,12 +61,27 @@ export class PaymentController {
     @Body() body: any,
     @Headers('Origin') origin: string
   ) {
+    console.log({body})
+
+    if(!body.date_debut || !body.date_fin) {
+      console.log({body})
+      throw new BadRequestException('Dates incorrectes');
+    }
+
     const date_debut = new Date(body.date_debut);
     const date_fin = new Date(body.date_fin);
     date_debut.setHours(12, 0, 0, 0);
     date_fin.setHours(12, 0, 0, 0);
 
-    const bien = await this.bienService.get(id_bien);
+    if(date_debut >= date_fin) {
+      throw new BadRequestException('Dates incorrectes');
+    }
+
+    const bien: any = await this.bienService.get(id_bien);
+    if(isDateInIntervals(bien.locations, date_debut) || isDateInIntervals(bien.locations, date_fin)) {
+      throw new HttpException('Conflict', HttpStatus.CONFLICT);
+    }
+
     const location = await this.locationService.create({
       id_bien: BigInt(bien.id),
       id_voyageur: compte.id,
