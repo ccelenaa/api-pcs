@@ -41,6 +41,26 @@ export class PrestationController {
   Route: /biens/:id_bien
   Recupere le bien ayant <id_bien>
   */
+  @Post(':id_prestation/set/prix')
+  @HttpCode(HttpStatus.OK)
+  async setPrix(@Param('id_prestation') id_prestation: number, @Body('prix_prestataire') prix_prestataire: number) {
+    return this.prestationService.setPrix(id_prestation, +prix_prestataire);
+  }
+
+  /*
+  Route: /biens/:id_bien
+  Recupere le bien ayant <id_bien>
+  */
+  @Post(':id_prestation/terminee')
+  @HttpCode(HttpStatus.OK)
+  async terminee(@Param('id_prestation') id_prestation: number) {
+    return this.prestationService.terminee(id_prestation);
+  }
+
+  /*
+  Route: /biens/:id_bien
+  Recupere le bien ayant <id_bien>
+  */
   @Get('voyageur/:id_voyageur')
   @HttpCode(HttpStatus.OK)
   async getPrestationVoyageur(@Param('id_voyageur') id_voyageur: number) {

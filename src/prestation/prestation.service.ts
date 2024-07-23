@@ -65,6 +65,47 @@ export class PrestationService {
     });
   }
 
+  async setPrix(id_prestation: number, prix_prestataire: number): Promise<prestation> {
+    return await this.prisma.prestation.update({
+      where: {
+        id: id_prestation
+      },
+      data: {
+        prix_prestataire,
+        statut: 2,
+        service: {
+          update: {
+            statut: 2
+          },
+        },
+      },
+      include: {
+        prestataire: true,
+        service: true,
+      }
+    });
+  }
+
+  async terminee(id_prestation: number): Promise<prestation> {
+    return await this.prisma.prestation.update({
+      where: {
+        id: id_prestation
+      },
+      data: {
+        statut: 10,
+        service: {
+          update: {
+            statut: 10
+          },
+        },
+      },
+      include: {
+        prestataire: true,
+        service: true,
+      }
+    });
+  }
+
   async deleteByAdmin(id_prestation: number): Promise<prestation> {
     return await this.prisma.prestation.update({
       where: {

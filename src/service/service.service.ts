@@ -169,7 +169,8 @@ export class ServiceService {
         data: {
           id_service,
           id_prestataire,
-          date_prestation: service.date
+          date_prestation: service.date,
+          statut: 1
         }
       });
     }

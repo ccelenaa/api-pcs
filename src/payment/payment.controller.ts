@@ -15,7 +15,7 @@ import {
 import { GetCompte } from 'src/auth/decorator';
 import { JwtRequiredGuard, JwtOptionalGuard } from 'src/auth/guard';
 import { PaymentService } from './payment.service';
-import { location, transaction, voyageur } from '@prisma/client';
+import { location, Prisma, transaction, voyageur } from '@prisma/client';
 import { LocationService } from 'src/location/location.service';
 import { BienService } from 'src/bien/bien.service';
 import { htmlPdf } from 'src/utils/pdf'
@@ -23,10 +23,12 @@ import { createHash } from 'node:crypto'
 import { TransactionService } from 'src/transaction/transaction.service';
 import { createReadStream } from 'node:fs';
 import { PrestationService } from 'src/prestation/prestation.service';
+import { PrismaService } from 'src/prisma/prisma.service';
 
 @Controller('payments')
 export class PaymentController {
   constructor(
+    private readonly prismaService: PrismaService,
     private readonly transactionService: TransactionService,
     private readonly bienService: BienService,
     private readonly prestationService: PrestationService,
@@ -69,15 +71,22 @@ export class PaymentController {
     @Headers('Origin') origin: string
   ) {
     const prestation = await this.prestationService.get(id_prestation);
-    const location = await this.locationService.create({
-      id_bien: BigInt(prestation.id),
-      id_voyageur: compte.id,
-      prix: prestation.prix_prestataire,
-      date_debut: new Date(),
-      date_fin: new Date(),
-    } as location);
+    const session = await this.paymentService.prestation(compte, prestation, origin);
+    await this.prismaService.prestation.update({
+      where: {
+        id: prestation.id
+      },
+      data: {
+        statut: 3,
+        service: {
+          update: {
+            statut: 3
+          }
+        }
+      }
+    });
 
-    return await this.paymentService.location(compte, location, origin);
+    return session;
   }
 
 

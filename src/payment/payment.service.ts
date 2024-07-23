@@ -1,6 +1,6 @@
 import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
 import { HttpService, HttpModule } from '@nestjs/axios';
-import { location, voyageur } from '@prisma/client';
+import { location, prestation, voyageur } from '@prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { catchError, EMPTY, firstValueFrom, lastValueFrom, map, Observable, retry, RetryConfig } from 'rxjs';
 import { RabbitMQService } from 'src/rabbitmq/rabbitmq.service';
@@ -70,56 +70,59 @@ export class PaymentService {
   
     return {id: session.id};    
   }
+  
+  async prestation(voyageur: voyageur, prestation: prestation, origin: string): Promise<Object> {
+    const url = `${origin}`;
 
-  async prestation(voyageur: voyageur, priceId: string, origin: string): Promise<Object> {
-    // const price = await this.prisma.price.findFirst({ where: { id: priceId } });
-    // const wallet = await this.prisma.wallet.findFirst({ where: { id: price.model_id } });
-
-    const url = `${origin}/payment`;
-    
     const data = {
+      email: voyageur.email,
+      productName: 'prestation',
+      productDescription: 'prestataion',
+      amount: parseFloat((prestation.prix_prestataire*1.1).toFixed(2)) * 100,
       currency: 'eur',
-      successUrl: `${url}/prestations?success={CHECKOUT_SESSION_ID}`,
-      cancelUrl: `${url}/prestations?cancel={CHECKOUT_SESSION_ID}`,
-      productName: `appar`,
-      productDescription: 'Appartement',
-      images: ['https://multilok.fr/wp-content/uploads/2022/11/ICONE-SITE-premium-1.jpg'],
-      email: 'guest@email.com',
-      amount: 222,
       metadata: {
-        type: `appartement`,
-        produit: `id`,
-        price: 333,
-        currency: 'eur',
-        transaction_id: '00000000-0000-0000-0000-000000000000',
-        id_compte: '00000000-0000-0000-0000-000000000000',
+        type: `prestation`,
+        id: prestation.id,
+        product: 'prestation',
+        price: (prestation.prix_prestataire*1.1).toFixed(2),
+        id_compte: voyageur.id,
         type_compte: 'Voyageur',
       },
+      successUrl: `${url}/prestations?success={CHECKOUT_SESSION_ID}`,
+      cancelUrl: `${url}/prestations?cancel={CHECKOUT_SESSION_ID}`,
+      images: ['https://multilok.fr/wp-content/uploads/2022/11/ICONE-SITE-premium-1.jpg'],
     };
 
     const paymentHost = this.configService.get('payment.host');
-    
+
     const response = await firstValueFrom(
       this.httpService.post(
         `${paymentHost}/sessions/create`, data, { responseType: 'json' }
       ).pipe(
-        retry({ count: 12, delay: 3000 }),
+        retry({ count: 3, delay: 3000 }),
         catchError(() => {
           return EMPTY;
         })
       )
     );
-    console.log({response});
-    return response['data'];
 
-    // return await this.httpService.post(`${paymentUrl}/payment`, data, {responseType: 'json'})
-    // .pipe(retry(3))
-    // .pipe(map((res) => res))
-    // .pipe(catchError((err) => {
-      //   console.log(err);
-    //   throw new ForbiddenException('API not available');
-    // }));
-    
+    const session = response['data'];
+    await this.prisma.transaction.create({
+      data: {
+        id_prestation: prestation.id,
+        session_id: session.id,
+        session_status: session.status,
+        payment_intent: session.payment_intent,
+        payment_status: session.payment_status,
+        amount: session.amount_total,
+        url: session.url,
+        data: session,
+        date_creation: new Date(session.created * 1000),
+        date_expiration: new Date(session.expires_at * 1000)
+      }
+    });
+  
+    return {id: session.id};    
   }
 
 
