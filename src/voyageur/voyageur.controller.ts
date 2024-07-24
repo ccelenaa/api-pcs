@@ -27,21 +27,21 @@ export class VoyageurController {
   Route: /voyageurs/:id_voyageur
   Recupere le voyageurs ayant <id_voyageur>
   */
-  @Get(':id_voyageur')
+  @Get('transactions')
+  @UseGuards(JwtRequiredGuard)
   @HttpCode(HttpStatus.OK)
-  async get(@Param('id_voyageur') id_voyageur: number) {
-    return this.voyageurService.get(id_voyageur);
+  async transactions(@GetCompte() voyageur: voyageur) {
+    return this.transactionService.getsVoyageur(Number(voyageur.id));
   }
 
   /*
   Route: /voyageurs/:id_voyageur
   Recupere le voyageurs ayant <id_voyageur>
   */
-  @Get(':id_voyageur/transactions')
-  @UseGuards(JwtRequiredGuard)
+  @Get(':id_voyageur')
   @HttpCode(HttpStatus.OK)
-  async transactions(@GetCompte() voyageur: voyageur) {
-    return this.transactionService.getsVoyageur(Number(voyageur.id));
+  async get(@Param('id_voyageur') id_voyageur: number) {
+    return this.voyageurService.get(id_voyageur);
   }
 
   /*

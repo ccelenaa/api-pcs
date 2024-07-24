@@ -13,6 +13,7 @@ export class PrestataireController {
   @Get()
   @HttpCode(HttpStatus.OK)
   async gets() {
+    // await this.delay(5000);
     return this.prestataireService.gets();
   }
 
@@ -44,5 +45,9 @@ export class PrestataireController {
   @HttpCode(HttpStatus.OK)
   async suspendre(@Param('id_prestataire') id_prestataire: number, @Body('suspendre') suspendre: boolean) {
     return this.prestataireService.suspendre(id_prestataire, suspendre).then((b: any) => { delete b.password; return b; });
+  }
+
+  private delay(ms: number): Promise<void> {
+    return new Promise(resolve => setTimeout(resolve, ms));
   }
 }
