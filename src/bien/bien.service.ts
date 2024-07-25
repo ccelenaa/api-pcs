@@ -46,7 +46,11 @@ export class BienService {
     return await this.prisma.bien.findFirst({
       include: {
         bailleur: true,
-        locations: true,
+        locations: {
+          include: {
+            voyageur: true
+          }
+        },
         photos: {
           where: {
             model: 'bien'
